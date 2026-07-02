@@ -175,8 +175,16 @@ const LS='kanji50_v1';let hist=JSON.parse(localStorage.getItem(LS)||'{"total":0,
 
 function save(){localStorage.setItem(LS,JSON.stringify(hist));updateStats()}function shuffle(a){return [...a].sort(()=>Math.random()-.5)}function updateStats(){total.textContent=hist.total;correct.textContent=hist.correct;rate.textContent=hist.total?Math.round(hist.correct/hist.total*100)+'%':'0%';wrongCount.textContent=hist.wrong.length}
 
-function ids(kind){let all=QUESTIONS.map((_,i)=>i);return kind==='wrong'?(hist.wrong.length?shuffle(hist.wrong):shuffle(all)):shuffle(all)}
+function ids(kind){
+    let all = QUESTIONS.map((_, i) => i);
 
+    if(kind === 'wrong'){
+        return hist.wrong.length ? hist.wrong : all;
+    }
+
+    return all;
+}
+  
 function start(m,kind){mode=m;lastMode=m;order=ids(kind);idx=0;session=[];home.classList.add('hidden');result.classList.add('hidden');listPanel.classList.add('hidden');quiz.classList.remove('hidden');showQ()}
 
 function showQ(){let n=order[idx],it=QUESTIONS[n];progress.textContent=(idx+1)+' / '+order.length+'　No.'+(n+1);bar.style.width=((idx)/order.length*100)+'%';q.textContent=it.q;answer.classList.add('hidden');judge.classList.add('hidden');nextBtn.classList.add('hidden');feedback.classList.add('hidden');writeBox.classList.toggle('hidden',mode!=='write');choiceBox.classList.toggle('hidden',mode!=='choice');if(mode==='choice')choices(n)}
