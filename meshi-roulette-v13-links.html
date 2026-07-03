@@ -1,1467 +1,784 @@
 <!doctype html>
-
 <html lang="ja">
-
 <head>
-
-  <meta charset="utf-8" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <title>飯ルーレット v13</title>
-
-  <style>
-
-    :root {
-
-      --bg: #fff7ed;
-
-      --card: #ffffff;
-
-      --text: #1f2937;
-
-      --muted: #6b7280;
-
-      --accent: #f97316;
-
-      --accent-dark: #ea580c;
-
-      --line: #fed7aa;
-
-      --soft: #ffedd5;
-
-      --success: #16a34a;
-
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-
-      margin: 0;
-
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-
-      background: radial-gradient(circle at top, #fff7ed 0%, #ffedd5 42%, #fed7aa 100%);
-
-      color: var(--text);
-
-      min-height: 100vh;
-
-    }
-
-    .app {
-
-      width: min(1100px, 94vw);
-
-      margin: 0 auto;
-
-      padding: 28px 0 44px;
-
-    }
-
-    header {
-
-      display: flex;
-
-      justify-content: space-between;
-
-      gap: 16px;
-
-      align-items: flex-end;
-
-      margin-bottom: 20px;
-
-    }
-
-    h1 {
-
-      margin: 0;
-
-      font-size: clamp(32px, 6vw, 56px);
-
-      letter-spacing: -0.06em;
-
-      line-height: 1;
-
-    }
-
-    .subtitle { margin: 10px 0 0; color: var(--muted); }
-
-    .badge {
-
-      background: var(--text);
-
-      color: #fff;
-
-      border-radius: 999px;
-
-      padding: 8px 12px;
-
-      font-size: 13px;
-
-      white-space: nowrap;
-
-    }
-
-    .grid {
-
-      display: grid;
-
-      grid-template-columns: 360px 1fr;
-
-      gap: 18px;
-
-      align-items: start;
-
-    }
-
-    .card {
-
-      background: rgba(255,255,255,.9);
-
-      border: 1px solid var(--line);
-
-      border-radius: 24px;
-
-      box-shadow: 0 18px 50px rgba(154, 52, 18, .12);
-
-      padding: 18px;
-
-      backdrop-filter: blur(10px);
-
-    }
-
-    .section-title {
-
-      font-weight: 800;
-
-      margin: 0 0 10px;
-
-      font-size: 15px;
-
-    }
-
-    .field { margin-bottom: 18px; }
-
-    select, button {
-
-      font: inherit;
-
-    }
-
-    select {
-
-      width: 100%;
-
-      border: 1px solid var(--line);
-
-      border-radius: 14px;
-
-      padding: 12px 14px;
-
-      background: #fff;
-
-      color: var(--text);
-
-      outline: none;
-
-    }
-
-    .segmented {
-
-      display: grid;
-
-      grid-template-columns: repeat(2, 1fr);
-
-      gap: 8px;
-
-    }
-
-    .segmented button, .preset button, .small-btn {
-
-      border: 1px solid var(--line);
-
-      background: #fff;
-
-      border-radius: 999px;
-
-      padding: 10px 9px;
-
-      cursor: pointer;
-
-      color: var(--text);
-
-    }
-
-    .segmented button.active, .preset button.active {
-
-      background: var(--accent);
-
-      border-color: var(--accent);
-
-      color: #fff;
-
-      font-weight: 700;
-
-    }
-
-    .line-actions {
-
-      display: flex;
-
-      gap: 8px;
-
-      margin-bottom: 10px;
-
-      flex-wrap: wrap;
-
-    }
-
-    .small-btn {
-
-      padding: 7px 11px;
-
-      font-size: 13px;
-
-    }
-
-    .small-btn:hover { border-color: var(--accent); }
-
-    .line-list {
-
-      display: grid;
-
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-
-      gap: 8px;
-
-    }
-
-    .check {
-
-      display: flex;
-
-      align-items: center;
-
-      gap: 8px;
-
-      padding: 10px;
-
-      border: 1px solid var(--line);
-
-      border-radius: 14px;
-
-      background: #fff;
-
-      cursor: pointer;
-
-      user-select: none;
-
-      font-size: 14px;
-
-    }
-
-    .check input { accent-color: var(--accent); }
-
-    .meta {
-
-      font-size: 13px;
-
-      color: var(--muted);
-
-      margin-top: 10px;
-
-      line-height: 1.6;
-
-    }
-
-    .main-panel {
-
-      display: grid;
-
-      gap: 18px;
-
-    }
-
-    .hero-card {
-
-      min-height: 250px;
-
-      display: flex;
-
-      flex-direction: column;
-
-      justify-content: center;
-
-      align-items: center;
-
-      text-align: center;
-
-      position: relative;
-
-      overflow: hidden;
-
-    }
-
-    .hero-card:before {
-
-      content: "";
-
-      position: absolute;
-
-      inset: -80px;
-
-      background: conic-gradient(from 0deg, transparent, rgba(249,115,22,.22), transparent, rgba(251,146,60,.22), transparent);
-
-      animation: spin 9s linear infinite;
-
-      opacity: .8;
-
-    }
-
-    .hero-inner {
-
-      position: relative;
-
-      background: rgba(255,255,255,.78);
-
-      border: 1px solid rgba(255,237,213,.9);
-
-      border-radius: 22px;
-
-      padding: 22px;
-
-      width: 100%;
-
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .roulette-text {
-
-      font-size: clamp(28px, 5vw, 52px);
-
-      font-weight: 900;
-
-      letter-spacing: -0.04em;
-
-      margin: 0 0 8px;
-
-    }
-
-    .hint { color: var(--muted); margin: 0; }
-
-    .roll-btn {
-
-      border: 0;
-
-      margin-top: 20px;
-
-      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-
-      color: #fff;
-
-      font-size: 19px;
-
-      font-weight: 800;
-
-      border-radius: 18px;
-
-      padding: 15px 28px;
-
-      cursor: pointer;
-
-      box-shadow: 0 14px 24px rgba(234,88,12,.25);
-
-    }
-
-    .roll-btn:active { transform: translateY(1px); }
-
-    .results {
-
-      display: grid;
-
-      grid-template-columns: repeat(3, 1fr);
-
-      gap: 12px;
-
-    }
-
-    .result {
-
-      background: #fff;
-
-      border: 1px solid var(--line);
-
-      border-radius: 20px;
-
-      padding: 16px;
-
-      min-height: 172px;
-
-      text-align: center;
-
-    }
-
-    .result .num {
-
-      display: inline-flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      width: 32px;
-
-      height: 32px;
-
-      background: var(--soft);
-
-      color: var(--accent-dark);
-
-      border-radius: 50%;
-
-      font-weight: 900;
-
-      margin-bottom: 12px;
-
-    }
-
-    .matchup {
-
-      display: grid;
-
-      gap: 6px;
-
-      justify-items: center;
-
-      align-items: center;
-
-    }
-
-    .genre, .station {
-
-      font-size: clamp(24px, 3vw, 34px);
-
-      line-height: 1.15;
-
-      font-weight: 900;
-
-      letter-spacing: -0.03em;
-
-    }
-
-    .station { color: var(--text); }
-
-    .cross {
-
-      font-size: 24px;
-
-      line-height: 1;
-
-      color: var(--accent-dark);
-
-      font-weight: 900;
-
-    }
-
-    .copy-row {
-
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: center;
-
-      gap: 10px;
-
-      margin-top: 12px;
-
-      flex-wrap: wrap;
-
-    }
-
-    .copy-buttons {
-
-      display: flex;
-
-      gap: 8px;
-
-      align-items: center;
-
-      flex-wrap: wrap;
-
-      justify-content: flex-end;
-
-    }
-
-    .copy-btn {
-
-      border: 1px solid var(--line);
-
-      background: #fff;
-
-      border-radius: 12px;
-
-      padding: 10px 14px;
-
-      cursor: pointer;
-
-      font-weight: 700;
-
-    }
-
-    .toast { color: var(--success); font-size: 13px; opacity: 0; transition: .2s; }
-
-    .toast.show { opacity: 1; }
-
-    .screenshot-row {
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      gap: 10px;
-
-      margin: 14px 0 18px;
-
-      flex-wrap: wrap;
-
-    }
-
-    .screenshot-btn {
-
-      border-color: rgba(249, 115, 22, .35);
-
-      background: linear-gradient(135deg, #fff7ed, #ffffff);
-
-      color: var(--accent-dark);
-
-      box-shadow: 0 8px 20px rgba(249, 115, 22, .16);
-
-    }
-
-    .history-list {
-
-      margin: 0;
-
-      padding: 0;
-
-      list-style: none;
-
-      display: grid;
-
-      gap: 8px;
-
-      max-height: 210px;
-
-      overflow: auto;
-
-    }
-
-    .history-list li {
-
-      background: #fff;
-
-      border: 1px solid var(--line);
-
-      border-radius: 12px;
-
-      padding: 10px;
-
-      color: var(--muted);
-
-      font-size: 14px;
-
-    }
-
-    .shake { animation: shake .45s ease-in-out; }
-
-    @keyframes shake {
-
-      0%,100% { transform: translateX(0); }
-
-      25% { transform: translateX(-5px); }
-
-      50% { transform: translateX(5px); }
-
-      75% { transform: translateX(-3px); }
-
-    }
-
-    @media (max-width: 860px) {
-
-      header { align-items: flex-start; flex-direction: column; }
-
-      .grid { grid-template-columns: 1fr; }
-
-      .results { grid-template-columns: 1fr; }
-
-      .line-list { grid-template-columns: 1fr; }
-
-    }
-
-    #genreMode button.active {
-
-      background: var(--accent);
-
-      color: white;
-
-      border-color: var(--accent);
-
-    }
-
-    .link-row {
-
-      display: flex;
-
-      gap: 6px;
-
-      justify-content: center;
-
-      margin-top: 12px;
-
-      flex-wrap: wrap;
-
-    }
-
-    .link-btn {
-
-      display: inline-block;
-
-      padding: 7px 10px;
-
-      border-radius: 999px;
-
-      font-size: 12px;
-
-      font-weight: 700;
-
-      text-decoration: none;
-
-      border: 1px solid var(--line);
-
-      background: #fff;
-
-      color: var(--text);
-
-      transition: 0.15s;
-
-      cursor: pointer;
-
-    }
-
-    .link-btn:hover {
-
-      background: var(--soft);
-
-      border-color: var(--accent);
-
-      color: var(--accent-dark);
-
-      transform: translateY(-1px);
-
-    }
-
-    .link-btn.tabelog { color: #c00; border-color: #f5c2c2; }
-
-    .link-btn.tabelog:hover { background: #fff0f0; border-color: #e57373; }
-
-    .link-btn.hotpepper { color: #d84315; border-color: #ffccbc; }
-
-    .link-btn.hotpepper:hover { background: #fff3e0; border-color: #ff7043; }
-
-    .link-btn.gmap    { color: #1a73e8; border-color: #c2d7f5; }
-
-    .link-btn.gmap:hover    { background: #eef4ff; border-color: #4a90e2; }
-
-    .decide-btn {
-
-      display: block;
-
-      width: 100%;
-
-      margin-top: 10px;
-
-      padding: 10px 14px;
-
-      border-radius: 14px;
-
-      font-size: 14px;
-
-      font-weight: 800;
-
-      border: 0;
-
-      background: linear-gradient(135deg, #f97316, #ec4899);
-
-      color: #fff;
-
-      cursor: pointer;
-
-      box-shadow: 0 8px 18px rgba(249, 115, 22, .28);
-
-      transition: 0.15s;
-
-      letter-spacing: 0.02em;
-
-    }
-
-    .decide-btn:hover {
-
-      transform: translateY(-1px);
-
-      box-shadow: 0 12px 22px rgba(249, 115, 22, .35);
-
-    }
-
-    .decide-btn:active { transform: translateY(1px); }
-
-  </style>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>飯ルーレット v13</title>
+  <style>
+    :root {
+      --bg: #fff7ed;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #f97316;
+      --accent-dark: #ea580c;
+      --line: #fed7aa;
+      --soft: #ffedd5;
+      --success: #16a34a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #fff7ed 0%, #ffedd5 42%, #fed7aa 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .app {
+      width: min(1100px, 94vw);
+      margin: 0 auto;
+      padding: 28px 0 44px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 6vw, 56px);
+      letter-spacing: -0.06em;
+      line-height: 1;
+    }
+    .subtitle { margin: 10px 0 0; color: var(--muted); }
+    .badge {
+      background: var(--text);
+      color: #fff;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+    .card {
+      background: rgba(255,255,255,.9);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 18px 50px rgba(154, 52, 18, .12);
+      padding: 18px;
+      backdrop-filter: blur(10px);
+    }
+    .section-title {
+      font-weight: 800;
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+    .field { margin-bottom: 18px; }
+    select, button {
+      font: inherit;
+    }
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: #fff;
+      color: var(--text);
+      outline: none;
+    }
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .segmented button, .preset button, .small-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 10px 9px;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .segmented button.active, .preset button.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 700;
+    }
+    .line-actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .small-btn {
+      padding: 7px 11px;
+      font-size: 13px;
+    }
+    .small-btn:hover { border-color: var(--accent); }
+    .line-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      cursor: pointer;
+      user-select: none;
+      font-size: 14px;
+    }
+    .check input { accent-color: var(--accent); }
+    .meta {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+    .main-panel {
+      display: grid;
+      gap: 18px;
+    }
+    .hero-card {
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card:before {
+      content: "";
+      position: absolute;
+      inset: -80px;
+      background: conic-gradient(from 0deg, transparent, rgba(249,115,22,.22), transparent, rgba(251,146,60,.22), transparent);
+      animation: spin 9s linear infinite;
+      opacity: .8;
+    }
+    .hero-inner {
+      position: relative;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(255,237,213,.9);
+      border-radius: 22px;
+      padding: 22px;
+      width: 100%;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .roulette-text {
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      margin: 0 0 8px;
+    }
+    .hint { color: var(--muted); margin: 0; }
+    .roll-btn {
+      border: 0;
+      margin-top: 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: #fff;
+      font-size: 19px;
+      font-weight: 800;
+      border-radius: 18px;
+      padding: 15px 28px;
+      cursor: pointer;
+      box-shadow: 0 14px 24px rgba(234,88,12,.25);
+    }
+    .roll-btn:active { transform: translateY(1px); }
+    .results {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .result {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+      min-height: 172px;
+      text-align: center;
+    }
+    .result .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: var(--soft);
+      color: var(--accent-dark);
+      border-radius: 50%;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+    .matchup {
+      display: grid;
+      gap: 6px;
+      justify-items: center;
+      align-items: center;
+    }
+    .genre, .station {
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.15;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+    .station { color: var(--text); }
+    .cross {
+      font-size: 24px;
+      line-height: 1;
+      color: var(--accent-dark);
+      font-weight: 900;
+    }
+    .copy-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .copy-buttons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .copy-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .toast { color: var(--success); font-size: 13px; opacity: 0; transition: .2s; }
+    .toast.show { opacity: 1; }
+    .screenshot-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 14px 0 18px;
+      flex-wrap: wrap;
+    }
+    .screenshot-btn {
+      border-color: rgba(249, 115, 22, .35);
+      background: linear-gradient(135deg, #fff7ed, #ffffff);
+      color: var(--accent-dark);
+      box-shadow: 0 8px 20px rgba(249, 115, 22, .16);
+    }
+
+    .history-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+      max-height: 210px;
+      overflow: auto;
+    }
+    .history-list li {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .shake { animation: shake .45s ease-in-out; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-3px); }
+    }
+    @media (max-width: 860px) {
+      header { align-items: flex-start; flex-direction: column; }
+      .grid { grid-template-columns: 1fr; }
+      .results { grid-template-columns: 1fr; }
+      .line-list { grid-template-columns: 1fr; }
+    }
+
+    #genreMode button.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+
+    .link-row {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .link-btn {
+      display: inline-block;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      transition: 0.15s;
+      cursor: pointer;
+    }
+    .link-btn:hover {
+      background: var(--soft);
+      border-color: var(--accent);
+      color: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+    .link-btn.tabelog { color: #c00; border-color: #f5c2c2; }
+    .link-btn.tabelog:hover { background: #fff0f0; border-color: #e57373; }
+    .link-btn.hotpepper { color: #d84315; border-color: #ffccbc; }
+    .link-btn.hotpepper:hover { background: #fff3e0; border-color: #ff7043; }
+    .link-btn.gmap    { color: #1a73e8; border-color: #c2d7f5; }
+    .link-btn.gmap:hover    { background: #eef4ff; border-color: #4a90e2; }
+    .decide-btn {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 800;
+      border: 0;
+      background: linear-gradient(135deg, #f97316, #ec4899);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(249, 115, 22, .28);
+      transition: 0.15s;
+      letter-spacing: 0.02em;
+    }
+    .decide-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 22px rgba(249, 115, 22, .35);
+    }
+    .decide-btn:active { transform: translateY(1px); }
+
+  </style>
 </head>
-
 <body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>飯ルーレット</h1>
+        <p class="subtitle">拠点・沿線・気分を選んで、今日の飯を3つ出す。</p>
+      </div>
+      <div class="badge">Google経由確実検索版 v13</div>
+    </header>
 
-  <div class="app">
+    <div class="grid">
+      <aside class="card">
+        <div class="field">
+          <p class="section-title">飯ジャンル</p>
+          <div class="segmented" id="genreMode">
+            <button data-mode="normal">まあ普通</button>
+            <button data-mode="challenge">チャレンジ</button>
+            <button data-mode="drinking">飲み会</button>
+          </div>
+          <p class="hint">複数選択OK。ジャンルを1つ以上選んでください。</p>
+        </div>
 
-    <header>
+        <div class="field">
+          <p class="section-title">拠点</p>
+          <select id="baseSelect"></select>
+        </div>
 
-      <div>
+        <div class="field">
+          <p class="section-title">沿線 複数選択OK</p>
+          <div class="line-actions">
+            <button class="small-btn" id="selectAll">全選択</button>
+            <button class="small-btn" id="clearAll">全解除</button>
+            <button class="small-btn" id="nearPreset">近場だけ</button>
+          </div>
+          <div class="line-list" id="lineList"></div>
+          <div class="meta" id="stationMeta"></div>
+        </div>
+      </aside>
 
-        <h1>飯ルーレット</h1>
+      <main class="main-panel">
+        <section class="card hero-card" id="heroCard">
+          <div class="hero-inner">
+            <p class="roulette-text" id="rouletteText">今日、何食う？</p>
+            <p class="hint">条件を選んでボタンを押すだけ。</p>
+            <button class="roll-btn" id="rollBtn">候補を3つ出す</button>
+          </div>
+        </section>
 
-        <p class="subtitle">拠点・沿線・気分を選んで、今日の飯を3つ出す。</p>
+        <section class="results" id="results"></section>
 
-      </div>
+        <div class="screenshot-row">
+          <span class="toast" id="toast">コピーしました</span>
+          <button class="copy-btn screenshot-btn" id="copyImageBtn">📸 結果をスクショ</button>
+        </div>
 
-      <div class="badge">Google経由確実検索版 v13</div>
-
-    </header>
-
-    <div class="grid">
-
-      <aside class="card">
-
-        <div class="field">
-
-          <p class="section-title">飯ジャンル</p>
-
-          <div class="segmented" id="genreMode">
-
-            <button data-mode="normal">まあ普通</button>
-
-            <button data-mode="challenge">チャレンジ</button>
-
-            <button data-mode="drinking">飲み会</button>
-
-          </div>
-
-          <p class="hint">複数選択OK。ジャンルを1つ以上選んでください。</p>
-
-        </div>
-
-        <div class="field">
-
-          <p class="section-title">拠点</p>
-
-          <select id="baseSelect"></select>
-
-        </div>
-
-        <div class="field">
-
-          <p class="section-title">沿線 複数選択OK</p>
-
-          <div class="line-actions">
-
-            <button class="small-btn" id="selectAll">全選択</button>
-
-            <button class="small-btn" id="clearAll">全解除</button>
-
-            <button class="small-btn" id="nearPreset">近場だけ</button>
-
-          </div>
-
-          <div class="line-list" id="lineList"></div>
-
-          <div class="meta" id="stationMeta"></div>
-
-        </div>
-
-      </aside>
-
-      <main class="main-panel">
-
-        <section class="card hero-card" id="heroCard">
-
-          <div class="hero-inner">
-
-            <p class="roulette-text" id="rouletteText">今日、何食う？</p>
-
-            <p class="hint">条件を選んでボタンを押すだけ。</p>
-
-            <button class="roll-btn" id="rollBtn">候補を3つ出す</button>
-
-          </div>
-
-        </section>
-
-        <section class="results" id="results"></section>
-
-        <div class="screenshot-row">
-
-          <span class="toast" id="toast">コピーしました</span>
-
-          <button class="copy-btn screenshot-btn" id="copyImageBtn">📸 結果をスクショ</button>
-
-        </div>
-
-        <section class="card">
-
-          <div class="copy-row">
-
-            <p class="section-title" style="margin:0;">履歴</p>
-
-            <div class="copy-buttons">
-
-              <button class="copy-btn" id="copyBtn">テキストコピー</button>
-
-            </div>
-
-          </div>
-
-          <ul class="history-list" id="history"></ul>
-
-        </section>
-
-      </main>
-
-    </div>
-
-  </div>
+        <section class="card">
+          <div class="copy-row">
+            <p class="section-title" style="margin:0;">履歴</p>
+            <div class="copy-buttons">
+              <button class="copy-btn" id="copyBtn">テキストコピー</button>
+            </div>
+          </div>
+          <ul class="history-list" id="history"></ul>
+        </section>
+      </main>
+    </div>
+  </div>
 
 <script>
-
 const foodData = {
-
-  normal: [
-
-    "定食", "とんかつ", "天ぷら", "寿司", "回転寿司", "海鮮丼", "焼き魚", "親子丼", "牛丼", "カツ丼", "天丼",
-
-    "ラーメン", "つけ麺", "うどん", "そば", "パスタ", "焼きそば",
-
-    "焼肉", "ホルモン", "ハンバーグ", "焼鳥", "唐揚げ", "牛タン",
-
-    "町中華", "餃子", "チャーハン", "オムライス", "ドリア", "グラタン", "カレー",
-
-    "ハンバーガー", "お好み焼き", "もんじゃ"
-
-  ],
-
-  challenge: [
-
-    "うなぎ", "ステーキ", "ジビエ", "羊料理", "馬肉", "シュラスコ", "ケバブ",
-
-    "韓国料理", "タイ料理", "ベトナム料理", "台湾料理", "インド料理", "ネパール料理", "メキシコ料理", "トルコ料理", "スペイン料理", "ブラジル料理",
-
-    "家系", "二郎系", "担々麺", "台湾まぜそば", "鶏白湯", "煮干し", "塩ラーメン専門", "味噌ラーメン専門", "油そば", "フォー", "ビーフン", "ビャンビャン麺", "冷麺",
-
-    "ガパオ", "ナシゴレン", "ロコモコ", "タコライス", "天津飯", "ビビンバ",
-
-    "古民家カフェ", "昭和喫茶", "ブックカフェ", "パフェ", "パンケーキ", "ドーナツ", "ジェラート", "クレープ", "かき氷"
-
-  ],
-
-  drinking: [
-
-    "居酒屋", "焼鳥", "海鮮居酒屋", "肉バル", "ワインバル",
-
-    "ビストロ", "イタリアンバル", "スペインバル", "餃子酒場", "韓国酒場",
-
-    "立ち飲み", "せんべろ", "クラフトビール", "日本酒バー", "焼肉飲み",
-
-    "ホルモン飲み", "もつ焼き", "おでん", "町中華飲み", "大衆酒場"
-
-  ]
-
+  normal: [
+    "定食", "とんかつ", "天ぷら", "寿司", "回転寿司", "海鮮丼", "焼き魚", "親子丼", "牛丼", "カツ丼", "天丼",
+    "ラーメン", "つけ麺", "うどん", "そば", "パスタ", "焼きそば",
+    "焼肉", "ホルモン", "ハンバーグ", "焼鳥", "唐揚げ", "牛タン",
+    "町中華", "餃子", "チャーハン", "オムライス", "ドリア", "グラタン", "カレー",
+    "ハンバーガー", "お好み焼き", "もんじゃ"
+  ],
+  challenge: [
+    "うなぎ", "ステーキ", "ジビエ", "羊料理", "馬肉", "シュラスコ", "ケバブ",
+    "韓国料理", "タイ料理", "ベトナム料理", "台湾料理", "インド料理", "ネパール料理", "メキシコ料理", "トルコ料理", "スペイン料理", "ブラジル料理",
+    "家系", "二郎系", "担々麺", "台湾まぜそば", "鶏白湯", "煮干し", "塩ラーメン専門", "味噌ラーメン専門", "油そば", "フォー", "ビーフン", "ビャンビャン麺", "冷麺",
+    "ガパオ", "ナシゴレン", "ロコモコ", "タコライス", "天津飯", "ビビンバ",
+    "古民家カフェ", "昭和喫茶", "ブックカフェ", "パフェ", "パンケーキ", "ドーナツ", "ジェラート", "クレープ", "かき氷"
+  ],
+  drinking: [
+    "居酒屋", "焼鳥", "海鮮居酒屋", "肉バル", "ワインバル",
+    "ビストロ", "イタリアンバル", "スペインバル", "餃子酒場", "韓国酒場",
+    "立ち飲み", "せんべろ", "クラフトビール", "日本酒バー", "焼肉飲み",
+    "ホルモン飲み", "もつ焼き", "おでん", "町中華飲み", "大衆酒場"
+  ]
 };
 
 const stationData = {
-
-  toyosu: {
-
-    label: "豊洲",
-
-    near: ["有楽町線", "ゆりかもめ", "京葉線"],
-
-    lines: {
-
-      "有楽町線": ["豊洲", "月島", "新富町", "銀座一丁目", "有楽町", "永田町", "市ヶ谷", "飯田橋", "池袋"],
-
-      "ゆりかもめ": ["新豊洲", "市場前", "有明", "台場", "汐留", "新橋"],
-
-      "京葉線": ["越中島", "八丁堀", "東京", "新木場", "舞浜"],
-
-      "東西線": ["門前仲町", "茅場町", "日本橋", "大手町", "飯田橋", "高田馬場"],
-
-      "日比谷線": ["築地", "東銀座", "銀座", "日比谷", "霞ケ関", "六本木", "恵比寿", "秋葉原", "上野"],
-
-      "銀座線": ["銀座", "新橋", "日本橋", "三越前", "神田", "上野", "浅草", "表参道", "渋谷"],
-
-      "山手線": ["東京", "有楽町", "新橋", "浜松町", "品川", "恵比寿", "渋谷", "新宿", "池袋", "上野", "秋葉原"],
-
-      "大江戸線": ["月島", "勝どき", "築地市場", "汐留", "六本木", "飯田橋", "上野御徒町", "門前仲町"],
-
-      "りんかい線": ["国際展示場", "東京テレポート", "天王洲アイル", "大井町", "大崎"]
-
-    }
-
-  },
-
-  nishikasai: {
-
-    label: "西葛西",
-
-    near: ["東西線", "京葉線"],
-
-    lines: {
-
-      "東西線": ["西葛西", "葛西", "浦安", "南砂町", "東陽町", "木場", "門前仲町", "茅場町", "日本橋", "大手町", "飯田橋", "高田馬場", "中野"],
-
-      "京葉線": ["葛西臨海公園", "新木場", "潮見", "越中島", "八丁堀", "東京", "舞浜"],
-
-      "日比谷線": ["茅場町", "八丁堀", "築地", "東銀座", "銀座", "日比谷", "秋葉原", "上野", "恵比寿"],
-
-      "銀座線": ["日本橋", "三越前", "神田", "上野", "浅草", "銀座", "新橋", "表参道", "渋谷"],
-
-      "山手線": ["東京", "有楽町", "新橋", "品川", "渋谷", "新宿", "池袋", "上野", "秋葉原"],
-
-      "有楽町線": ["新木場", "豊洲", "月島", "新富町", "銀座一丁目", "有楽町", "飯田橋", "池袋"],
-
-      "都営新宿線": ["船堀", "一之江", "森下", "馬喰横山", "神保町", "新宿三丁目", "新宿"],
-
-      "半蔵門線": ["清澄白河", "水天宮前", "三越前", "大手町", "神保町", "表参道", "渋谷", "押上"]
-
-    }
-
-  }
-
+  toyosu: {
+    label: "豊洲",
+    near: ["有楽町線", "ゆりかもめ", "京葉線"],
+    lines: {
+      "有楽町線": ["豊洲", "月島", "新富町", "銀座一丁目", "有楽町", "永田町", "市ヶ谷", "飯田橋", "池袋"],
+      "ゆりかもめ": ["新豊洲", "市場前", "有明", "台場", "汐留", "新橋"],
+      "京葉線": ["越中島", "八丁堀", "東京", "新木場", "舞浜"],
+      "東西線": ["門前仲町", "茅場町", "日本橋", "大手町", "飯田橋", "高田馬場"],
+      "日比谷線": ["築地", "東銀座", "銀座", "日比谷", "霞ケ関", "六本木", "恵比寿", "秋葉原", "上野"],
+      "銀座線": ["銀座", "新橋", "日本橋", "三越前", "神田", "上野", "浅草", "表参道", "渋谷"],
+      "山手線": ["東京", "有楽町", "新橋", "浜松町", "品川", "恵比寿", "渋谷", "新宿", "池袋", "上野", "秋葉原"],
+      "大江戸線": ["月島", "勝どき", "築地市場", "汐留", "六本木", "飯田橋", "上野御徒町", "門前仲町"],
+      "りんかい線": ["国際展示場", "東京テレポート", "天王洲アイル", "大井町", "大崎"]
+    }
+  },
+  nishikasai: {
+    label: "西葛西",
+    near: ["東西線", "京葉線"],
+    lines: {
+      "東西線": ["西葛西", "葛西", "浦安", "南砂町", "東陽町", "木場", "門前仲町", "茅場町", "日本橋", "大手町", "飯田橋", "高田馬場", "中野"],
+      "京葉線": ["葛西臨海公園", "新木場", "潮見", "越中島", "八丁堀", "東京", "舞浜"],
+      "日比谷線": ["茅場町", "八丁堀", "築地", "東銀座", "銀座", "日比谷", "秋葉原", "上野", "恵比寿"],
+      "銀座線": ["日本橋", "三越前", "神田", "上野", "浅草", "銀座", "新橋", "表参道", "渋谷"],
+      "山手線": ["東京", "有楽町", "新橋", "品川", "渋谷", "新宿", "池袋", "上野", "秋葉原"],
+      "有楽町線": ["新木場", "豊洲", "月島", "新富町", "銀座一丁目", "有楽町", "飯田橋", "池袋"],
+      "都営新宿線": ["船堀", "一之江", "森下", "馬喰横山", "神保町", "新宿三丁目", "新宿"],
+      "半蔵門線": ["清澄白河", "水天宮前", "三越前", "大手町", "神保町", "表参道", "渋谷", "押上"]
+    }
+  }
 };
 
 let currentModes = [];
-
 let latestResults = [];
 
 const baseSelect = document.getElementById("baseSelect");
-
 const lineList = document.getElementById("lineList");
-
 const stationMeta = document.getElementById("stationMeta");
-
 const resultsEl = document.getElementById("results");
-
 const historyEl = document.getElementById("history");
-
 const rouletteText = document.getElementById("rouletteText");
-
 const heroCard = document.getElementById("heroCard");
-
 const toast = document.getElementById("toast");
 
 function uniq(arr) { return [...new Set(arr)]; }
-
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
 function initBases() {
-
-  baseSelect.innerHTML = Object.entries(stationData).map(([key, data]) => `<option value="${key}">${data.label}</option>`).join("");
-
+  baseSelect.innerHTML = Object.entries(stationData).map(([key, data]) => `<option value="${key}">${data.label}</option>`).join("");
 }
 
 function renderLines() {
-
-  const base = stationData[baseSelect.value];
-
-  const names = Object.keys(base.lines);
-
-  lineList.innerHTML = names.map(name => {
-
-    return `<label class="check"><input type="checkbox" value="${name}"> ${name}</label>`;
-
-  }).join("");
-
-  lineList.querySelectorAll("input").forEach(input => input.addEventListener("change", updateMeta));
-
-  updateMeta();
-
+  const base = stationData[baseSelect.value];
+  const names = Object.keys(base.lines);
+  lineList.innerHTML = names.map(name => {
+    return `<label class="check"><input type="checkbox" value="${name}"> ${name}</label>`;
+  }).join("");
+  lineList.querySelectorAll("input").forEach(input => input.addEventListener("change", updateMeta));
+  updateMeta();
 }
 
 function selectedLines() {
-
-  return [...lineList.querySelectorAll("input:checked")].map(i => i.value);
-
+  return [...lineList.querySelectorAll("input:checked")].map(i => i.value);
 }
 
 function selectedStations() {
-
-  const base = stationData[baseSelect.value];
-
-  return uniq(selectedLines().flatMap(line => base.lines[line] || []));
-
+  const base = stationData[baseSelect.value];
+  return uniq(selectedLines().flatMap(line => base.lines[line] || []));
 }
 
 function selectedFoods() {
-
-  return uniq(currentModes.flatMap(mode => foodData[mode] || []));
-
+  return uniq(currentModes.flatMap(mode => foodData[mode] || []));
 }
 
 function selectedFoodLabels() {
-
-  const labelMap = { normal: "まあ普通", challenge: "チャレンジ", drinking: "飲み会" };
-
-  return currentModes.map(mode => labelMap[mode]).filter(Boolean);
-
+  const labelMap = { normal: "まあ普通", challenge: "チャレンジ", drinking: "飲み会" };
+  return currentModes.map(mode => labelMap[mode]).filter(Boolean);
 }
 
 function updateMeta() {
-
-  const lines = selectedLines();
-
-  const stations = selectedStations();
-
-  stationMeta.textContent = `${lines.length}路線 / ${stations.length}駅が抽選対象です。重複駅は自動で除外します。`;
-
+  const lines = selectedLines();
+  const stations = selectedStations();
+  stationMeta.textContent = `${lines.length}路線 / ${stations.length}駅が抽選対象です。重複駅は自動で除外します。`;
 }
 
 function roll() {
+  const foods = selectedFoods();
+  const stations = selectedStations();
+  if (!foods.length) {
+    alert("飯ジャンルを1つ以上選択してください。");
+    return;
+  }
+  if (!stations.length) {
+    alert("沿線を1つ以上選択してください。");
+    return;
+  }
 
-  const foods = selectedFoods();
+  heroCard.classList.remove("shake");
+  void heroCard.offsetWidth;
+  heroCard.classList.add("shake");
 
-  const stations = selectedStations();
-
-  if (!foods.length) {
-
-    alert("飯ジャンルを1つ以上選択してください。");
-
-    return;
-
-  }
-
-  if (!stations.length) {
-
-    alert("沿線を1つ以上選択してください。");
-
-    return;
-
-  }
-
-  heroCard.classList.remove("shake");
-
-  void heroCard.offsetWidth;
-
-  heroCard.classList.add("shake");
-
-  let ticks = 0;
-
-  const timer = setInterval(() => {
-
-    rouletteText.textContent = `${pick(stations)} × ${pick(foods)}`;
-
-    ticks += 1;
-
-    if (ticks > 16) {
-
-      clearInterval(timer);
-
-      latestResults = buildResults(foods, stations);
-
-      rouletteText.textContent = "結果発表！";
-
-      renderResults();
-
-      addHistory();
-
-    }
-
-  }, 55);
-
+  let ticks = 0;
+  const timer = setInterval(() => {
+    rouletteText.textContent = `${pick(stations)} × ${pick(foods)}`;
+    ticks += 1;
+    if (ticks > 16) {
+      clearInterval(timer);
+      latestResults = buildResults(foods, stations);
+      rouletteText.textContent = "結果発表！";
+      renderResults();
+      addHistory();
+    }
+  }, 55);
 }
 
 function buildResults(foods, stations) {
-
-  const foodPool = shuffle(foods);
-
-  const stationPool = shuffle(stations);
-
-  return [0, 1, 2].map(i => ({
-
-    genre: foodPool[i % foodPool.length],
-
-    station: stationPool[i % stationPool.length]
-
-  }));
-
+  const foodPool = shuffle(foods);
+  const stationPool = shuffle(stations);
+  return [0, 1, 2].map(i => ({
+    genre: foodPool[i % foodPool.length],
+    station: stationPool[i % stationPool.length]
+  }));
 }
 
 function renderResults() {
-
-  resultsEl.innerHTML = latestResults.map((r, i) => {
-
-    // Google経由でsite:指定検索することで、駅名を確実に認識させる
-
-    // ダイレクトなURL指定だと全国検索やエラーになるため、Google検索結果ページに誘導する
-
-    const tabelogQ   = encodeURIComponent(`${r.station}駅 ${r.genre} site:tabelog.com`);
-
-    const hotpepperQ = encodeURIComponent(`${r.station}駅 ${r.genre} site:hotpepper.jp`);
-
-    const gmapQ      = encodeURIComponent(`${r.station} ${r.genre}`);
-
-    const tabelogUrl   = `https://www.google.com/search?q=${tabelogQ}`;
-
-    const hotpepperUrl = `https://www.google.com/search?q=${hotpepperQ}`;
-
-    const gmapUrl      = `https://www.google.com/maps/search/?api=1&query=${gmapQ}`;
-
-    return `
-
-      <div class="result">
-
-        <div class="num">${i + 1}</div>
-
-        <div class="matchup">
-
-          <div class="station">${r.station}</div>
-
-          <div class="cross">×</div>
-
-          <div class="genre">${r.genre}</div>
-
-        </div>
-
-        <div class="link-row">
-
-          <a class="link-btn tabelog" href="${tabelogUrl}" target="_blank" rel="noopener" title="Google経由で食べログの駅別ページを検索">🍽 食べログ</a>
-
-          <a class="link-btn hotpepper" href="${hotpepperUrl}" target="_blank" rel="noopener" title="Google経由でHotPepperの駅別ページを検索">🌶 HotPepper</a>
-
-          <a class="link-btn gmap" href="${gmapUrl}" target="_blank" rel="noopener">📍 マップ</a>
-
-        </div>
-
-        <button class="decide-btn" onclick="decideOpenAll('${tabelogUrl}','${hotpepperUrl}','${gmapUrl}')">🎯 これに決めた！(3サイト一括検索)</button>
-
-      </div>
-
-    `;
-
-  }).join("");
-
+  resultsEl.innerHTML = latestResults.map((r, i) => {
+    // Google経由でsite:指定検索することで、駅名を確実に認識させる
+    // ダイレクトなURL指定だと全国検索やエラーになるため、Google検索結果ページに誘導する
+    const tabelogQ   = encodeURIComponent(`${r.station}駅 ${r.genre} site:tabelog.com`);
+    const hotpepperQ = encodeURIComponent(`${r.station}駅 ${r.genre} site:hotpepper.jp`);
+    const gmapQ      = encodeURIComponent(`${r.station} ${r.genre}`);
+    const tabelogUrl   = `https://www.google.com/search?q=${tabelogQ}`;
+    const hotpepperUrl = `https://www.google.com/search?q=${hotpepperQ}`;
+    const gmapUrl      = `https://www.google.com/maps/search/?api=1&query=${gmapQ}`;
+    return `
+      <div class="result">
+        <div class="num">${i + 1}</div>
+        <div class="matchup">
+          <div class="station">${r.station}</div>
+          <div class="cross">×</div>
+          <div class="genre">${r.genre}</div>
+        </div>
+        <div class="link-row">
+          <a class="link-btn tabelog" href="${tabelogUrl}" target="_blank" rel="noopener" title="Google経由で食べログの駅別ページを検索">🍽 食べログ</a>
+          <a class="link-btn hotpepper" href="${hotpepperUrl}" target="_blank" rel="noopener" title="Google経由でHotPepperの駅別ページを検索">🌶 HotPepper</a>
+          <a class="link-btn gmap" href="${gmapUrl}" target="_blank" rel="noopener">📍 マップ</a>
+        </div>
+        <button class="decide-btn" onclick="decideOpenAll('${tabelogUrl}','${hotpepperUrl}','${gmapUrl}')">🎯 これに決めた！(3サイト一括検索)</button>
+      </div>
+    `;
+  }).join("");
 }
 
 // 「決めた！」ボタン用: 3サイトを一括で新規タブで開く
-
 function decideOpenAll(tabelogUrl, hotpepperUrl, gmapUrl) {
-
-  window.open(tabelogUrl,   "_blank", "noopener");
-
-  window.open(hotpepperUrl, "_blank", "noopener");
-
-  window.open(gmapUrl,      "_blank", "noopener");
-
-  toast.textContent = "3サイトを開きました！";
-
-  toast.classList.add("show");
-
-  setTimeout(() => toast.classList.remove("show"), 1600);
-
+  window.open(tabelogUrl,   "_blank", "noopener");
+  window.open(hotpepperUrl, "_blank", "noopener");
+  window.open(gmapUrl,      "_blank", "noopener");
+  toast.textContent = "3サイトを開きました！";
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 1600);
 }
 
 function addHistory() {
-
-  const label = stationData[baseSelect.value].label;
-
-  const modeLabel = selectedFoodLabels().join("＋");
-
-  const text = `${new Date().toLocaleTimeString("ja-JP", {hour: "2-digit", minute: "2-digit"})}｜${label}｜${modeLabel}｜` + latestResults.map(r => `${r.station} × ${r.genre}`).join(" / ");
-
-  const li = document.createElement("li");
-
-  li.textContent = text;
-
-  historyEl.prepend(li);
-
-  while (historyEl.children.length > 10) historyEl.lastChild.remove();
-
+  const label = stationData[baseSelect.value].label;
+  const modeLabel = selectedFoodLabels().join("＋");
+  const text = `${new Date().toLocaleTimeString("ja-JP", {hour: "2-digit", minute: "2-digit"})}｜${label}｜${modeLabel}｜` + latestResults.map(r => `${r.station} × ${r.genre}`).join(" / ");
+  const li = document.createElement("li");
+  li.textContent = text;
+  historyEl.prepend(li);
+  while (historyEl.children.length > 10) historyEl.lastChild.remove();
 }
 
 async function copyResults() {
-
-  if (!latestResults.length) return;
-
-  const text = latestResults.map((r, i) => `候補${i + 1}: ${r.station} × ${r.genre}`).join("\n");
-
-  await navigator.clipboard.writeText(text);
-
-  toast.textContent = "テキストをコピーしました";
-
-  toast.classList.add("show");
-
-  setTimeout(() => toast.classList.remove("show"), 1200);
-
+  if (!latestResults.length) return;
+  const text = latestResults.map((r, i) => `候補${i + 1}: ${r.station} × ${r.genre}`).join("\n");
+  await navigator.clipboard.writeText(text);
+  toast.textContent = "テキストをコピーしました";
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 1200);
 }
 
 function drawRoundRect(ctx, x, y, w, h, r) {
-
-  ctx.beginPath();
-
-  ctx.moveTo(x + r, y);
-
-  ctx.lineTo(x + w - r, y);
-
-  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-
-  ctx.lineTo(x + w, y + h - r);
-
-  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-
-  ctx.lineTo(x + r, y + h);
-
-  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-
-  ctx.lineTo(x, y + r);
-
-  ctx.quadraticCurveTo(x, y, x + r, y);
-
-  ctx.closePath();
-
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
 }
 
 function drawCenteredText(ctx, text, x, y, maxWidth, baseFontPx, weight = 900) {
-
-  let fontSize = baseFontPx;
-
-  do {
-
-    ctx.font = `${weight} ${fontSize}px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
-
-    if (ctx.measureText(text).width <= maxWidth || fontSize <= 24) break;
-
-    fontSize -= 2;
-
-  } while (fontSize > 24);
-
-  ctx.fillText(text, x, y);
-
+  let fontSize = baseFontPx;
+  do {
+    ctx.font = `${weight} ${fontSize}px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+    if (ctx.measureText(text).width <= maxWidth || fontSize <= 24) break;
+    fontSize -= 2;
+  } while (fontSize > 24);
+  ctx.fillText(text, x, y);
 }
 
 function resultsToCanvas() {
+  const scale = 2;
+  const cardW = 330;
+  const cardH = 220;
+  const gap = 22;
+  const pad = 24;
+  const width = pad * 2 + cardW * 3 + gap * 2;
+  const height = pad * 2 + cardH;
+  const canvas = document.createElement("canvas");
+  canvas.width = width * scale;
+  canvas.height = height * scale;
+  const ctx = canvas.getContext("2d");
+  ctx.scale(scale, scale);
 
-  const scale = 2;
+  ctx.fillStyle = "#fff7ed";
+  ctx.fillRect(0, 0, width, height);
 
-  const cardW = 330;
+  latestResults.forEach((r, i) => {
+    const x = pad + i * (cardW + gap);
+    const y = pad;
 
-  const cardH = 220;
+    ctx.save();
+    ctx.shadowColor = "rgba(154, 52, 18, .10)";
+    ctx.shadowBlur = 18;
+    ctx.shadowOffsetY = 8;
+    ctx.fillStyle = "#ffffff";
+    drawRoundRect(ctx, x, y, cardW, cardH, 22);
+    ctx.fill();
+    ctx.restore();
 
-  const gap = 22;
+    ctx.strokeStyle = "#fed7aa";
+    ctx.lineWidth = 1;
+    drawRoundRect(ctx, x, y, cardW, cardH, 22);
+    ctx.stroke();
 
-  const pad = 24;
+    ctx.fillStyle = "#ffedd5";
+    ctx.beginPath();
+    ctx.arc(x + cardW / 2, y + 34, 20, 0, Math.PI * 2);
+    ctx.fill();
 
-  const width = pad * 2 + cardW * 3 + gap * 2;
+    ctx.fillStyle = "#ea580c";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = "900 18px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+    ctx.fillText(String(i + 1), x + cardW / 2, y + 34);
 
-  const height = pad * 2 + cardH;
+    ctx.fillStyle = "#111827";
+    drawCenteredText(ctx, r.station, x + cardW / 2, y + 91, cardW - 44, 42);
 
-  const canvas = document.createElement("canvas");
+    ctx.fillStyle = "#ea580c";
+    ctx.font = "900 28px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+    ctx.fillText("×", x + cardW / 2, y + 124);
 
-  canvas.width = width * scale;
+    ctx.fillStyle = "#111827";
+    drawCenteredText(ctx, r.genre, x + cardW / 2, y + 166, cardW - 44, 42);
+  });
 
-  canvas.height = height * scale;
-
-  const ctx = canvas.getContext("2d");
-
-  ctx.scale(scale, scale);
-
-  ctx.fillStyle = "#fff7ed";
-
-  ctx.fillRect(0, 0, width, height);
-
-  latestResults.forEach((r, i) => {
-
-    const x = pad + i * (cardW + gap);
-
-    const y = pad;
-
-    ctx.save();
-
-    ctx.shadowColor = "rgba(154, 52, 18, .10)";
-
-    ctx.shadowBlur = 18;
-
-    ctx.shadowOffsetY = 8;
-
-    ctx.fillStyle = "#ffffff";
-
-    drawRoundRect(ctx, x, y, cardW, cardH, 22);
-
-    ctx.fill();
-
-    ctx.restore();
-
-    ctx.strokeStyle = "#fed7aa";
-
-    ctx.lineWidth = 1;
-
-    drawRoundRect(ctx, x, y, cardW, cardH, 22);
-
-    ctx.stroke();
-
-    ctx.fillStyle = "#ffedd5";
-
-    ctx.beginPath();
-
-    ctx.arc(x + cardW / 2, y + 34, 20, 0, Math.PI * 2);
-
-    ctx.fill();
-
-    ctx.fillStyle = "#ea580c";
-
-    ctx.textAlign = "center";
-
-    ctx.textBaseline = "middle";
-
-    ctx.font = "900 18px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
-
-    ctx.fillText(String(i + 1), x + cardW / 2, y + 34);
-
-    ctx.fillStyle = "#111827";
-
-    drawCenteredText(ctx, r.station, x + cardW / 2, y + 91, cardW - 44, 42);
-
-    ctx.fillStyle = "#ea580c";
-
-    ctx.font = "900 28px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
-
-    ctx.fillText("×", x + cardW / 2, y + 124);
-
-    ctx.fillStyle = "#111827";
-
-    drawCenteredText(ctx, r.genre, x + cardW / 2, y + 166, cardW - 44, 42);
-
-  });
-
-  return canvas;
-
+  return canvas;
 }
 
 async function copyResultsImage() {
+  if (!latestResults.length) return;
+  const canvas = resultsToCanvas();
+  const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
 
-  if (!latestResults.length) return;
-
-  const canvas = resultsToCanvas();
-
-  const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
-
-  try {
-
-    if (!navigator.clipboard || !window.ClipboardItem) throw new Error("image clipboard unsupported");
-
-    await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-
-    toast.textContent = "画像をコピーしました";
-
-    toast.classList.add("show");
-
-    setTimeout(() => toast.classList.remove("show"), 1400);
-
-  } catch (err) {
-
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-
-    a.href = url;
-
-    a.download = "meshi-roulette-result.png";
-
-    document.body.appendChild(a);
-
-    a.click();
-
-    a.remove();
-
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-    toast.textContent = "画像を保存しました";
-
-    toast.classList.add("show");
-
-    setTimeout(() => toast.classList.remove("show"), 1400);
-
-  }
-
+  try {
+    if (!navigator.clipboard || !window.ClipboardItem) throw new Error("image clipboard unsupported");
+    await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+    toast.textContent = "画像をコピーしました";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 1400);
+  } catch (err) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "meshi-roulette-result.png";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.textContent = "画像を保存しました";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 1400);
+  }
 }
 
 document.getElementById("genreMode").addEventListener("click", e => {
-
-  if (!e.target.matches("button")) return;
-
-  const mode = e.target.dataset.mode;
-
-  e.target.classList.toggle("active");
-
-  currentModes = [...document.querySelectorAll("#genreMode button.active")].map(b => b.dataset.mode);
-
+  if (!e.target.matches("button")) return;
+  const mode = e.target.dataset.mode;
+  e.target.classList.toggle("active");
+  currentModes = [...document.querySelectorAll("#genreMode button.active")].map(b => b.dataset.mode);
 });
 
 baseSelect.addEventListener("change", () => renderLines());
-
 document.getElementById("selectAll").addEventListener("click", () => {
-
-  lineList.querySelectorAll("input").forEach(i => i.checked = true);
-
-  updateMeta();
-
+  lineList.querySelectorAll("input").forEach(i => i.checked = true);
+  updateMeta();
 });
-
 document.getElementById("clearAll").addEventListener("click", () => {
-
-  lineList.querySelectorAll("input").forEach(i => i.checked = false);
-
-  updateMeta();
-
+  lineList.querySelectorAll("input").forEach(i => i.checked = false);
+  updateMeta();
 });
-
 document.getElementById("nearPreset").addEventListener("click", () => {
-
-  const base = stationData[baseSelect.value];
-
-  lineList.querySelectorAll("input").forEach(i => i.checked = base.near.includes(i.value));
-
-  updateMeta();
-
+  const base = stationData[baseSelect.value];
+  lineList.querySelectorAll("input").forEach(i => i.checked = base.near.includes(i.value));
+  updateMeta();
 });
-
 document.getElementById("rollBtn").addEventListener("click", roll);
-
 document.getElementById("copyBtn").addEventListener("click", copyResults);
-
 document.getElementById("copyImageBtn").addEventListener("click", copyResultsImage);
 
 initBases();
-
 renderLines();
-
 renderResults();
-
 </script>
-
 </body>
-
 </html>
