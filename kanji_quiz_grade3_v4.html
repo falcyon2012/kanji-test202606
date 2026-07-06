@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>小3 漢字復習クイズ 50問 v4</title>
+<style>
+:root{--bg:#f7f6f2;--card:#fff;--text:#222;--muted:#666;--line:#e5e1d8;--accent:#2f7a68;--accent-dark:#276756;--bad:#c0392b;--good:#22863a;--warn:#9a681f;--warn-dark:#825817;--soft:#f1f5f3;--warn-soft:#fbf2e4}*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;background:var(--bg);color:var(--text)}header{padding:18px 14px 8px;text-align:center}h1{font-size:24px;margin:0 0 6px}.sub{color:var(--muted);font-size:14px}.wrap{max-width:920px;margin:0 auto;padding:10px 14px 30px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin:12px 0;box-shadow:0 2px 10px rgba(0,0,0,.04)}h2{font-size:20px;margin:0 0 12px}h3{font-size:18px;margin:0}.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.badge{font-size:14px;color:var(--muted);background:#f5f5f5;border:1px solid var(--line);border-radius:999px;padding:6px 10px;white-space:nowrap}button,select{font-family:inherit}button{font-size:17px;border:0;border-radius:14px;padding:13px 15px;background:var(--accent);color:white;margin:5px;cursor:pointer;touch-action:manipulation}button.secondary{background:#69707a}button.ghost{background:#eee;color:#222}button.good{background:var(--good)}button.bad{background:var(--bad)}button.warn{background:var(--warn)}button:disabled{opacity:.45;cursor:not-allowed}.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}.toprow{justify-content:space-between}.settings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.field{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:12px}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px}.field select{width:100%;font-size:18px;padding:10px;border:1px solid #ccc;border-radius:10px;background:white}.mode-group{border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:14px;background:#fff}.mode-group.all{border-top:6px solid var(--accent)}.mode-group.wrong{border-top:6px solid var(--warn);background:linear-gradient(180deg,var(--warn-soft),#fff 58%)}.mode-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.mode-buttons button{width:100%;min-height:92px;font-size:21px;font-weight:700;margin:0;background:var(--accent)}.mode-buttons button:hover{background:var(--accent-dark)}.mode-buttons button.warn{background:var(--warn)}.mode-buttons button.warn:hover{background:var(--warn-dark)}.mode-buttons button span{display:block;margin-top:7px;font-size:14px;font-weight:400;color:#fff;opacity:.95}.empty-note{border:1px dashed #c9b38d;background:#fffdf7;border-radius:14px;padding:12px;color:#6d5427;font-size:14px;line-height:1.6}.qno{font-size:14px;color:var(--muted)}.question{font-size:38px;line-height:1.45;text-align:center;margin:22px 0 14px}.answer{font-size:38px;text-align:center;font-weight:700;color:var(--accent);margin:18px 0;white-space:pre-line}.hint{text-align:center;color:var(--muted);font-size:15px;line-height:1.6}.choices{display:grid;gap:10px;margin:18px 0}.choices button{width:100%;background:#fff;color:#222;border:2px solid var(--line);font-size:30px;padding:18px;margin:0}.choices button.correct{border-color:var(--good);background:#e9f7ee}.choices button.wrong{border-color:var(--bad);background:#fdecea}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}.stat{background:#fafafa;border:1px solid var(--line);border-radius:12px;padding:10px}.num{font-size:24px;font-weight:700}.label{font-size:12px;color:var(--muted)}.bar{height:12px;background:#eee;border-radius:99px;overflow:hidden;margin-top:10px}.bar>div{height:100%;background:var(--accent);width:0}.small{font-size:14px;color:var(--muted);line-height:1.6}.hidden{display:none!important}.list{max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:12px;padding:8px;background:#fafafa}.list div{padding:7px;border-bottom:1px solid #eee}.list div:last-child{border-bottom:0}.input-wrap{margin:20px 0}.kanji-input{width:100%;font-size:38px;padding:18px;text-align:center;border-radius:14px;border:2px solid #ccc;background:white}.kanji-input:focus{outline:3px solid rgba(47,122,104,.18);border-color:var(--accent)}@media(max-width:760px){.mode-buttons,.settings{grid-template-columns:1fr}.question{font-size:30px}.stats{grid-template-columns:repeat(2,1fr)}button{font-size:16px}.choices button{font-size:26px}.card{padding:15px}.toprow{justify-content:center}.toprow .qno{width:100%;text-align:center}.section-head{align-items:flex-start;flex-direction:column}.badge{white-space:normal}}
+</style>
+</head>
+<body>
+<header><h1>小3 漢字復習クイズ 50問 v4</h1><div class="sub">全体出題・間違えた問題・Apple Pencil入力・3/4/5択</div></header>
+<div class="wrap">
+<section id="home" class="card">
+  <h2>出題設定</h2>
+  <div class="settings">
+    <div class="field"><label>出題順</label><select id="orderSelect" onchange="saveSettings();updateStartNoState()"><option value="sequential">順番</option><option value="random">ランダム</option></select></div>
+    <div class="field"><label>順番の開始番号</label><select id="startNo" onchange="saveSettings()"></select></div>
+    <div class="field"><label>選択問題の数</label><select id="choiceCount" onchange="saveSettings()"><option value="3">3択</option><option value="4">4択</option><option value="5">5択</option></select></div>
+  </div>
+  <p class="small">「順番」を選んだ場合は、指定した番号からNo.50まで出題します。「ランダム」では対象の問題をシャッフルします。</p>
+
+  <div class="mode-group all">
+    <div class="section-head"><h3>全体出題</h3><div class="badge">50問</div></div>
+    <div class="mode-buttons">
+      <button onclick="start('write','all')">✍️ 漢字を書く<span>答えを見て○×</span></button>
+      <button onclick="start('input','all')">✏️ Apple Pencil入力<span>自動採点</span></button>
+      <button onclick="start('choice','all')">🎯 漢字を選ぶ<span>3択・4択・5択</span></button>
+    </div>
+  </div>
+
+  <div class="mode-group wrong">
+    <div class="section-head"><h3>間違えた問題</h3><div id="wrongBadge" class="badge">0問</div></div>
+    <div id="wrongEmpty" class="empty-note hidden">間違えた問題はまだありません。全体出題で間違えた問題が、ここに自動で追加されます。</div>
+    <div class="mode-buttons">
+      <button id="wrongWriteBtn" class="warn" onclick="start('write','wrong')">✍️ 漢字を書く<span>答えを見て○×</span></button>
+      <button id="wrongInputBtn" class="warn" onclick="start('input','wrong')">✏️ Apple Pencil入力<span>自動採点</span></button>
+      <button id="wrongChoiceBtn" class="warn" onclick="start('choice','wrong')">🎯 漢字を選ぶ<span>3択・4択・5択</span></button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>学習履歴</h2>
+    <div class="stats"><div class="stat"><div id="total" class="num">0</div><div class="label">回答数</div></div><div class="stat"><div id="correct" class="num">0</div><div class="label">正解</div></div><div class="stat"><div id="rate" class="num">0%</div><div class="label">正答率</div></div><div class="stat"><div id="wrongCount" class="num">0</div><div class="label">復習中</div></div></div>
+    <p class="small">履歴はこのiPadのSafariに保存されます。</p>
+    <div class="row"><button class="ghost" onclick="showList()">問題一覧</button><button class="bad" onclick="resetHistory()">履歴をリセット</button></div>
+  </div>
+</section>
+<section id="quiz" class="card hidden">
+  <div class="row toprow"><div class="qno" id="progress"></div><button class="ghost" onclick="goHome()">ホームへ</button></div>
+  <div class="bar"><div id="bar"></div></div>
+  <div id="q" class="question"></div>
+  <div id="writeBox" class="hidden">
+    <div id="writeMode"><div class="hint">紙やiPadに答えを書いてから「答えを見る」を押してください。</div><div class="row"><button onclick="reveal()">答えを見る</button></div><div id="answer" class="answer hidden"></div><div id="judge" class="row hidden"><button class="good" onclick="mark(true)">○ 正解</button><button class="bad" onclick="mark(false)">× まちがい</button></div></div>
+    <div id="inputMode" class="hidden"><div class="hint">Apple Pencilで下の欄へ漢字を書いてください。</div><div id="inputMount" class="input-wrap"></div><div class="row"><button onclick="checkInput()">答え合わせ</button></div></div>
+  </div>
+  <div id="choiceBox" class="choices hidden"></div>
+  <div id="feedback" class="answer hidden"></div>
+  <div class="row"><button id="nextBtn" class="secondary hidden" onclick="next()">次の問題へ</button></div>
+</section>
+<section id="result" class="card hidden">
+  <h2>結果</h2>
+  <div class="stats"><div class="stat"><div id="rTotal" class="num">0</div><div class="label">出題数</div></div><div class="stat"><div id="rCorrect" class="num">0</div><div class="label">正解</div></div><div class="stat"><div id="rRate" class="num">0%</div><div class="label">正答率</div></div><div class="stat"><div id="rWrong" class="num">0</div><div class="label">今回の間違い</div></div></div>
+  <div id="wrongList" class="list"></div>
+  <div class="row"><button onclick="goHome()">ホームへ</button><button class="warn" onclick="start(lastMode,'wrong')">間違えた問題だけ再挑戦</button></div>
+</section>
+<section id="listPanel" class="card hidden"><h2>問題一覧</h2><div id="allList" class="list"></div><div class="row"><button onclick="goHome()">閉じる</button></div></section>
+</div>
+<script>
+const QUESTIONS=[{q:'へん(じ)をする',a:'事'},{q:'(どう)物園',a:'動'},{q:'人(ぶつ)の顔',a:'物'},{q:'(の)りごごち',a:'乗'},{q:'(しゅ)人公',a:'主'},{q:'(はし)のたもと',a:'橋'},{q:'川(ぎし)を歩く',a:'岸'},{q:'(はっ)見する',a:'発'},{q:'(よ)そうする',a:'予'},{q:'空(そう)する',a:'想'},{q:'理(ゆう)を話す',a:'由'},{q:'体(おん)が高い',a:'温'},{q:'(かん)字を書く',a:'漢'},{q:'言葉の(い)味',a:'意'},{q:'記(ごう)を書く',a:'号'},{q:'(と)い合わせ',a:'問'},{q:'(れん)しゅう',a:'練'},{q:'国語の学(しゅう)',a:'習'},{q:'心に(かん)じる',a:'感'},{q:'(うん)どう場',a:'運'},{q:'回(てん)する',a:'転'},{q:'うめの(み)',a:'実'},{q:'(しょう)かする',a:'消'},{q:'へん(か)する',a:'化'},{q:'池の水(めん)',a:'面'},{q:'(み)をまもる',a:'身'},{q:'(だい)一話',a:'第'},{q:'(つぎ)の日',a:'次'},{q:'魚が(し)ぬ',a:'死'},{q:'四十(ど)近い',a:'度'},{q:'研(きゅう)する',a:'究'},{q:'十(びょう)くらい',a:'秒'},{q:'(しょう)わの日',a:'昭'},{q:'(わ)食の店',a:'和'},{q:'図書(かん)の本',a:'館'},{q:'文(しょう)を書く',a:'章'},{q:'虫の体(ぜん)体',a:'全'},{q:'本の(だい)名',a:'題'},{q:'木の(かわ)',a:'皮'},{q:'(あい)手に話す',a:'相'},{q:'目を(ひらく)',a:'開く'},{q:'ふり(かえる)',a:'返る'},{q:'山に(のぼる)',a:'登る'},{q:'本で(しらべる)',a:'調べる'},{q:'言葉で(あらわす)',a:'表す'},{q:'(おもい)にもつ',a:'重い'},{q:'人を(あつめる)',a:'集める'},{q:'魚が(およぐ)',a:'泳ぐ'},{q:'きまりを(まもる)',a:'守る'},{q:'川に(ながす)',a:'流す'}];
+const G3='悪 安 暗 医 委 意 育 員 院 飲 運 泳 駅 央 横 屋 温 化 荷 界 開 階 寒 感 漢 館 岸 起 期 客 究 急 級 宮 球 去 橋 業 曲 局 銀 区 苦 具 君 係 軽 血 決 研 県 庫 湖 向 幸 港 号 根 祭 皿 仕 死 使 始 指 歯 詩 次 事 持 式 実 写 者 主 守 取 酒 受 州 拾 終 習 集 住 重 宿 所 暑 助 昭 消 商 章 勝 乗 植 申 身 神 真 深 進 世 整 昔 全 相 送 想 息 速 族 他 打 対 帯 待 代 第 題 炭 短 談 着 注 柱 丁 帳 調 追 定 庭 笛 鉄 転 都 度 投 豆 島 湯 登 等 動 童 農 波 配 倍 箱 畑 発 反 坂 板 皮 悲 美 鼻 筆 氷 表 秒 病 品 負 部 服 福 物 平 返 勉 放 味 命 面 問 役 薬 由 油 有 遊 予 羊 洋 葉 陽 様 落 流 旅 両 緑 礼 列 練 路 和'.split(' ');
+const LS='kanji50_v2';const SETTINGS_LS='kanji50_settings_v1';let hist=JSON.parse(localStorage.getItem(LS)||'{"total":0,"correct":0,"wrong":[]}');let order=[],idx=0,mode='write',session=[],lastMode='write';
+function $(id){return document.getElementById(id)}function save(){localStorage.setItem(LS,JSON.stringify(hist));updateStats()}function setDisabled(id,disabled){let el=$(id);if(el)el.disabled=disabled}function shuffle(a){let b=[...a];for(let i=b.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}function updateStats(){$('total').textContent=hist.total;$('correct').textContent=hist.correct;$('rate').textContent=hist.total?Math.round(hist.correct/hist.total*100)+'%':'0%';$('wrongCount').textContent=hist.wrong.length;let wc=hist.wrong.length;if($('wrongBadge'))$('wrongBadge').textContent=wc+'問';if($('wrongEmpty'))$('wrongEmpty').classList.toggle('hidden',wc>0);['wrongWriteBtn','wrongInputBtn','wrongChoiceBtn'].forEach(id=>setDisabled(id,wc===0))}
+function getSettings(){try{return JSON.parse(localStorage.getItem(SETTINGS_LS)||'{}')}catch(e){return {}}}
+function saveSettings(){let settings={order:$('orderSelect').value,startNo:$('startNo').value,choiceCount:$('choiceCount').value};localStorage.setItem(SETTINGS_LS,JSON.stringify(settings))}
+function loadSettings(){let settings=getSettings();$('orderSelect').value=settings.order||'sequential';$('startNo').value=settings.startNo||'0';$('choiceCount').value=settings.choiceCount||'3'}
+function updateStartNoState(){let isSeq=$('orderSelect').value==='sequential';$('startNo').disabled=!isSeq}
+function init(){for(let i=1;i<=50;i++){let o=document.createElement('option');o.value=i-1;o.textContent='No.'+i;$('startNo').appendChild(o)}loadSettings();updateStartNoState();updateStats()}function baseIds(kind){let all=QUESTIONS.map((_,i)=>i);if(kind==='wrong')return [...hist.wrong];return all}
+function makeOrder(kind){let ids=baseIds(kind);if($('orderSelect').value==='random'||kind==='wrong')return shuffle(ids);let start=Number($('startNo').value||0);return ids.filter(i=>i>=start)}
+function start(m,kind){mode=m;lastMode=m;order=makeOrder(kind);if(order.length===0){alert('間違えた問題はありません。');return}idx=0;session=[];$('home').classList.add('hidden');$('result').classList.add('hidden');$('listPanel').classList.add('hidden');$('quiz').classList.remove('hidden');showQ()}
+function resetInput(){let mount=$('inputMount');mount.innerHTML='';let input=document.createElement('input');input.id='kanjiInput';input.type='text';input.className='kanji-input';input.autocomplete='off';input.autocorrect='off';input.autocapitalize='off';input.spellcheck=false;input.inputMode='text';mount.appendChild(input);setTimeout(()=>{input.blur();setTimeout(()=>input.focus(),60)},30)}
+function showQ(){let n=order[idx],it=QUESTIONS[n];$('progress').textContent=(idx+1)+' / '+order.length+'　No.'+(n+1);$('bar').style.width=(idx/order.length*100)+'%';$('q').textContent=it.q;$('answer').classList.add('hidden');$('judge').classList.add('hidden');$('nextBtn').classList.add('hidden');$('feedback').classList.add('hidden');$('feedback').style.color='';$('writeBox').classList.toggle('hidden',mode!=='write'&&mode!=='input');$('choiceBox').classList.toggle('hidden',mode!=='choice');if(mode==='write'){$('writeMode').classList.remove('hidden');$('inputMode').classList.add('hidden')}if(mode==='input'){$('writeMode').classList.add('hidden');$('inputMode').classList.remove('hidden');resetInput()}if(mode==='choice')choices(n)}
+function reveal(){$('answer').textContent=QUESTIONS[order[idx]].a;$('answer').classList.remove('hidden');$('judge').classList.remove('hidden')}function mark(ok){record(ok);$('nextBtn').classList.remove('hidden');$('judge').classList.add('hidden')}
+function suffixOf(ans){let m=ans.match(/^(.)(.*)$/);return m?m[2]:''}function stemOf(ans){return ans.charAt(0)}function distractor(correct){let suffix=suffixOf(correct);let avoid=new Set([stemOf(correct)]);let candidates=shuffle(G3.filter(k=>!avoid.has(k)));return candidates.map(k=>k+suffix)}
+function choices(n){let correct=QUESTIONS[n].a;let count=Number($('choiceCount').value);let opts=shuffle([correct,...distractor(correct).filter(x=>x!==correct).slice(0,count-1)]);$('choiceBox').innerHTML='';opts.forEach(o=>{let b=document.createElement('button');b.textContent=o;b.onclick=()=>{[...$('choiceBox').children].forEach(c=>c.disabled=true);if(o===correct){b.classList.add('correct');$('feedback').textContent='○ 正解！';record(true)}else{b.classList.add('wrong');[...$('choiceBox').children].find(c=>c.textContent===correct).classList.add('correct');$('feedback').textContent='答え：'+correct;record(false)}$('feedback').classList.remove('hidden');$('nextBtn').classList.remove('hidden')};$('choiceBox').appendChild(b)})}
+function normalize(s){return (s||'').trim().replace(/\s/g,'')}function checkInput(){let correct=QUESTIONS[order[idx]].a;let input=normalize($('kanjiInput')?.value);let ok=input===correct;$('feedback').classList.remove('hidden');if(ok){$('feedback').textContent='○ 正解！\n\n'+correct;$('feedback').style.color='#22863a'}else{$('feedback').textContent='× 不正解\n\nあなたの答え：'+input+'\n\n正解：'+correct;$('feedback').style.color='#c0392b'}record(ok);$('nextBtn').classList.remove('hidden')}
+function record(ok){let n=order[idx];hist.total++;if(ok){hist.correct++;hist.wrong=hist.wrong.filter(x=>x!==n)}else if(!hist.wrong.includes(n)){hist.wrong.push(n)}session.push({n,ok});save()}function next(){idx++;if(idx>=order.length)finish();else showQ()}function finish(){$('quiz').classList.add('hidden');$('result').classList.remove('hidden');$('bar').style.width='100%';let c=session.filter(x=>x.ok).length,w=session.length-c;$('rTotal').textContent=session.length;$('rCorrect').textContent=c;$('rRate').textContent=session.length?Math.round(c/session.length*100)+'%':'0%';$('rWrong').textContent=w;$('wrongList').innerHTML=w?session.filter(x=>!x.ok).map(x=>`<div>No.${x.n+1} ${QUESTIONS[x.n].q} → ${QUESTIONS[x.n].a}</div>`).join(''):'<div>全部正解です！</div>'}
+function goHome(){$('quiz').classList.add('hidden');$('result').classList.add('hidden');$('listPanel').classList.add('hidden');$('home').classList.remove('hidden');updateStats()}function resetHistory(){if(confirm('学習履歴をリセットしますか？')){hist={total:0,correct:0,wrong:[]};save()}}function showList(){$('home').classList.add('hidden');$('listPanel').classList.remove('hidden');$('allList').innerHTML=QUESTIONS.map((x,i)=>`<div>No.${i+1} ${x.q} → ${x.a}</div>`).join('')}init();
+</script>
+</body>
+</html>
